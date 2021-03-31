@@ -1,0 +1,5 @@
+pip list --format=freeze | awk -F '=' '{print $1}' 
+pip list
+pip show numpy
+pip search tesseract
+pip list --format=freeze >> requirements.txt
