@@ -1,146 +1,156 @@
 import itertools
 
+
 class Vector:
-	values = []
-	size = 0
+    values = []
+    size = 0
 
-	def init_from_list(self, values):
-		self.values = values
-		self.size = len(values)
+    def init_from_list(self, values):
+        self.values = []
+        for val in values:
+            self.values.append(float(val))
+        self.size = len(values)
 
-	def init_from_tupl(self, tupl):
-		self.values = []
-		self.size = tupl[1]
-		for i in range(tupl[0], tupl[1]):
-			self.values.append(float(i))
+    def init_from_tupl(self, tupl):
+        self.values = []
+        for i in range(tupl[0], tupl[1]):
+            self.values.append(float(i))
+        self.size = len(self.values)
 
-	def init_from_size(self, size):
-		self.init_from_tupl((0, size))
+    def init_from_size(self, size):
+        self.init_from_tupl((0, size))
 
-	def __init__(self, var):
-		if type(var) is tuple and len(var) == 2 and var[0] <= var[1]:
-			self.init_from_tupl(var)
-		elif type(var) is list and all(type(membr) is float for membr in var):
-			self.init_from_list(var)
-		elif type(var) is int and var >= 0:
-			self.init_from_size(var)
-		else:
-			print('Vector can only be initilized from a tuple(min, max), ' +
-			      'a positive integer as a size, or a list of floats.')
-			exit()
+    def __init__(self, var):
+        if (type(var) is tuple and len(var) == 2 and all(type(num) is int
+           for num in var) and var[0] <= var[1]):
+            self.init_from_tupl(var)
+        elif (type(var) is list and all(type(membr) is float or type(membr)
+              is int for membr in var)):
+            self.init_from_list(var)
+        elif type(var) is int and var >= 0:
+            self.init_from_size(var)
+        else:
+            print('Vector can only be initilized from ' +
+                  'a tuple(min: int, max: int), ' +
+                  'a positive integer as a size, or a list of floats.')
+            exit()
 
-	def __str__(self):
-		return '(Vector ' + str(self.values) + ')'
-	
+    def __str__(self):
+        return '(Vector ' + str(self.values) + ')'
 
-	def add_vector(self, vec):
-		if self.size != vec.size:
-			print('Operation on vectors with different sizes')
-			exit()
-		for i in range(0, self.size):
-			self.values[i] += vec.values[i]
-		return self
-	
-	def add_scalar(self, scalar):
-		scalar = float(scalar)
-		for i in range(0, self.size):
-			self.values[i] += scalar
-		return self
+    def __repr__(self):
+        return self.__str__()
 
-	def handle_add(self, var):
-		if (type(var) is not Vector and
-		   type(var) is not float and type(var) is not int):
-		   print('Invalid addition')
-		   exit()
-		elif type(var) is Vector:
-			return self.add_vector(var)
-		return self.add_scalar(var)
-	
-	def __add__(self, var):
-		return self.handle_add(var)
-	
-	def __radd__(self, var):
-		return self.handle_add(var)
+    def add_vector(self, vec):
+        if self.size != vec.size:
+            print('Operation on vectors with different sizes')
+            exit()
+        ret = Vector(self.values)
+        for i in range(0, ret.size):
+            ret.values[i] += vec.values[i]
+        return ret
 
-	def sub_vector(self, vec):
-		if self.size != vec.size:
-			print('Operation on vectors with different sizes')
-			exit()
-		for i in range(0, self.size):
-			self.values[i] += vec.values[i]
-		return self
-	
-	def sub_scalar(self, scalar):
-		scalar = float(scalar)
-		for i in range(0, self.size):
-			self.values[i] += scalar
-		return self
-	
-	def handle_sub(self, var):
-		if (type(var) is not Vector and
-		   type(var) is not float and type(var) is not int):
-			print('Invalid subtraction')
-			exit()
-		elif type(var) is Vector:
-			return self.sub_vector(var)
-		return self.sub_scalar(var)
+    def add_scalar(self, scalar):
+        ret = Vector(self.values)
+        scalar = float(scalar)
+        for i in range(0, ret.size):
+            ret.values[i] += scalar
+        return ret
 
-	def __sub__(self, var):
-		return self.handle_sub(var)
-	
-	def __rsub__(self, var):
-		return self.handle_sub(var)
+    def handle_add(self, var):
+        if (type(var) is not Vector and
+           type(var) is not float and type(var) is not int):
+            print('Invalid addition')
+            exit()
+        elif type(var) is Vector:
+            return self.add_vector(var)
+        return self.add_scalar(var)
 
-	def mul_vector(self, vec):
-		ret = 0.0
-		if self.size != vec.size:
-			print('Operation on vectors with different sizes')
-			exit()
-		for i in range(0, self.size):
-			ret += self.values[i] * vec.values[i]
-		return ret
-	
-	def mul_scalar(self, scalar):
-		scalar = float(scalar)
-		for i in range(0, self.size):
-			self.values[i] *= scalar
-		return self
+    def __add__(self, var):
+        return self.handle_add(var)
 
-	def handle_mul(self, var):
-		if (type(var) is not Vector and
-		   type(var) is not float and type(var) is not int):
-			print('Invalid multiplication')
-			exit()
-		elif type(var) is Vector:
-			return self.mul_vector(var)
-		return self.mul_scalar(var)
+    def __radd__(self, var):
+        return self.handle_add(var)
 
-	def __mul__(self, var):
-		return self.handle_mul(var)
+    def sub_vector(self, vec):
+        ret = Vector(self.values)
+        if ret.size != vec.size:
+            print('Operation on vectors with different sizes')
+            exit()
+        for i in range(0, ret.size):
+            ret.values[i] -= vec.values[i]
+        return ret
 
-	def __rmul__(self, var):
-		return self.handle_mul(var)
+    def sub_scalar(self, scalar):
+        ret = Vector(self.values)
+        scalar = float(scalar)
+        for i in range(0, ret.size):
+            ret.values[i] -= scalar
+        return ret
 
-	def truediv_scalar(self, scalar):
-		scalar = float(scalar)
-		if scalar == 0:
-			raise Exception('Vector division by Zero')
-		for i in range(0, self.size):
-			self.values[i] /= scalar
-		return self
+    def handle_sub(self, var):
+        if (type(var) is not Vector and
+           type(var) is not float and type(var) is not int):
+            print('Invalid subtraction')
+            exit()
+        elif type(var) is Vector:
+            return self.sub_vector(var)
+        return self.sub_scalar(var)
 
-	def handle_truediv(self, var):
-		if type(var) is not float and type(var) is not int:
-			print('Invalid division')
-			exit()
-		return self.truediv_scalar(var)
+    def __sub__(self, var):
+        return self.handle_sub(var)
 
-	def __truediv__(self, var):
-		return self.handle_truediv(var)
+    def __rsub__(self, var):
+        return self.handle_sub(var)
 
-	def __rtruediv__(self, var):
-		return self.handle_truediv(var)
+    def mul_vector(self, vec):
+        ret = 0.0
+        if self.size != vec.size:
+            print('Operation on vectors with different sizes')
+            exit()
+        for i in range(0, self.size):
+            ret += self.values[i] * vec.values[i]
+        return ret
 
-	def __repr__(self):
-		return self.__str__()
+    def mul_scalar(self, scalar):
+        ret = Vector(self.values)
+        scalar = float(scalar)
+        for i in range(0, ret.size):
+            ret.values[i] *= scalar
+        return ret
 
+    def handle_mul(self, var):
+        if (type(var) is not Vector and
+           type(var) is not float and type(var) is not int):
+            print('Invalid multiplication')
+            exit()
+        elif type(var) is Vector:
+            return self.mul_vector(var)
+        return self.mul_scalar(var)
+
+    def __mul__(self, var):
+        return self.handle_mul(var)
+
+    def __rmul__(self, var):
+        return self.handle_mul(var)
+
+    def truediv_scalar(self, scalar):
+        scalar = float(scalar)
+        ret = Vector(self.values)
+        if scalar == 0:
+            raise Exception('Vector division by Zero')
+        for i in range(0, ret.size):
+            ret.values[i] /= scalar
+        return ret
+
+    def handle_truediv(self, var):
+        if type(var) is not float and type(var) is not int:
+            print('Invalid division')
+            exit()
+        return self.truediv_scalar(var)
+
+    def __truediv__(self, var):
+        return self.handle_truediv(var)
+
+    def __rtruediv__(self, var):
+        return self.handle_truediv(var)
