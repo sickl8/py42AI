@@ -39,10 +39,10 @@ def ft_progress(listy):
     return
 
 
-listy = range(40)
+listy = range(1000)
 ret = 0
 for elem in ft_progress(listy):
     ret += elem
-    sleep(0.5)
+    sleep(0.01)
 print()
 print(ret)

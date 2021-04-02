@@ -1,3 +1,5 @@
+from vector import Vector
+
 class Matrix:
     data = []
     shape = ()
@@ -45,3 +47,8 @@ class Matrix:
         else:
             print('invalid matrix args')
             exit()
+
+    def __add__(self, var):
+        if type(var) == Vector and len(var.values)
+
+    def __radd__(self, var):
