@@ -4,18 +4,21 @@ import itertools
 class Vector:
     values = []
     size = 0
+    shape = ()
 
     def init_from_list(self, values):
         self.values = []
         for val in values:
             self.values.append(float(val))
         self.size = len(values)
+        self.shape = (self.size, 1)
 
     def init_from_tupl(self, tupl):
         self.values = []
         for i in range(tupl[0], tupl[1]):
             self.values.append(float(i))
         self.size = len(self.values)
+        self.shape = (self.size, 1)
 
     def init_from_size(self, size):
         self.init_from_tupl((0, size))
@@ -30,10 +33,9 @@ class Vector:
         elif type(var) is int and var >= 0:
             self.init_from_size(var)
         else:
-            print('Vector can only be initilized from ' +
-                  'a tuple(min: int, max: int), ' +
-                  'a positive integer as a size, or a list of floats.')
-            exit()
+            raise Exception('Vector can only be initilized from a tuple(min: int, max: i\
+nt), a positive integer as a size, or a list of floats.')
+            
 
     def __str__(self):
         return '(Vector ' + str(self.values) + ')'
@@ -43,8 +45,8 @@ class Vector:
 
     def add_vector(self, vec):
         if self.size != vec.size:
-            print('Operation on vectors with different sizes')
-            exit()
+            raise Exception('Operation on vectors with different sizes')
+            
         ret = Vector(self.values)
         for i in range(0, ret.size):
             ret.values[i] += vec.values[i]
@@ -60,8 +62,8 @@ class Vector:
     def handle_add(self, var):
         if (type(var) is not Vector and
            type(var) is not float and type(var) is not int):
-            print('Invalid addition')
-            exit()
+            raise Exception('Invalid addition')
+            
         elif type(var) is Vector:
             return self.add_vector(var)
         return self.add_scalar(var)
@@ -75,8 +77,8 @@ class Vector:
     def sub_vector(self, vec):
         ret = Vector(self.values)
         if ret.size != vec.size:
-            print('Operation on vectors with different sizes')
-            exit()
+            raise Exception('Operation on vectors with different sizes')
+            
         for i in range(0, ret.size):
             ret.values[i] -= vec.values[i]
         return ret
@@ -91,8 +93,8 @@ class Vector:
     def handle_sub(self, var):
         if (type(var) is not Vector and
            type(var) is not float and type(var) is not int):
-            print('Invalid subtraction')
-            exit()
+            raise Exception('Invalid subtraction')
+            
         elif type(var) is Vector:
             return self.sub_vector(var)
         return self.sub_scalar(var)
@@ -106,8 +108,8 @@ class Vector:
     def mul_vector(self, vec):
         ret = 0.0
         if self.size != vec.size:
-            print('Operation on vectors with different sizes')
-            exit()
+            raise Exception('Operation on vectors with different sizes')
+            
         for i in range(0, self.size):
             ret += self.values[i] * vec.values[i]
         return ret
@@ -122,8 +124,8 @@ class Vector:
     def handle_mul(self, var):
         if (type(var) is not Vector and
            type(var) is not float and type(var) is not int):
-            print('Invalid multiplication')
-            exit()
+            raise Exception('Invalid multiplication')
+            
         elif type(var) is Vector:
             return self.mul_vector(var)
         return self.mul_scalar(var)
@@ -145,8 +147,8 @@ class Vector:
 
     def handle_truediv(self, var):
         if type(var) is not float and type(var) is not int:
-            print('Invalid division')
-            exit()
+            raise Exception('Invalid division')
+            
         return self.truediv_scalar(var)
 
     def __truediv__(self, var):
