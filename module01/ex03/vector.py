@@ -33,9 +33,8 @@ class Vector:
         elif type(var) is int and var >= 0:
             self.init_from_size(var)
         else:
-            raise Exception('Vector can only be initilized from a tuple(min: int, max: i\
-nt), a positive integer as a size, or a list of floats.')
-            
+            raise Exception('Vector can only be initilized from a tuple(min: i\
+nt, max: int), a positive integer as a size, or a list of floats.')
 
     def __str__(self):
         return '(Vector ' + str(self.values) + ')'
@@ -46,7 +45,7 @@ nt), a positive integer as a size, or a list of floats.')
     def add_vector(self, vec):
         if self.size != vec.size:
             raise Exception('Operation on vectors with different sizes')
-            
+
         ret = Vector(self.values)
         for i in range(0, ret.size):
             ret.values[i] += vec.values[i]
@@ -63,7 +62,7 @@ nt), a positive integer as a size, or a list of floats.')
         if (type(var) is not Vector and
            type(var) is not float and type(var) is not int):
             raise Exception('Invalid addition')
-            
+
         elif type(var) is Vector:
             return self.add_vector(var)
         return self.add_scalar(var)
@@ -78,7 +77,7 @@ nt), a positive integer as a size, or a list of floats.')
         ret = Vector(self.values)
         if ret.size != vec.size:
             raise Exception('Operation on vectors with different sizes')
-            
+
         for i in range(0, ret.size):
             ret.values[i] -= vec.values[i]
         return ret
@@ -94,7 +93,7 @@ nt), a positive integer as a size, or a list of floats.')
         if (type(var) is not Vector and
            type(var) is not float and type(var) is not int):
             raise Exception('Invalid subtraction')
-            
+
         elif type(var) is Vector:
             return self.sub_vector(var)
         return self.sub_scalar(var)
@@ -109,7 +108,7 @@ nt), a positive integer as a size, or a list of floats.')
         ret = 0.0
         if self.size != vec.size:
             raise Exception('Operation on vectors with different sizes')
-            
+
         for i in range(0, self.size):
             ret += self.values[i] * vec.values[i]
         return ret
@@ -125,7 +124,7 @@ nt), a positive integer as a size, or a list of floats.')
         if (type(var) is not Vector and
            type(var) is not float and type(var) is not int):
             raise Exception('Invalid multiplication')
-            
+
         elif type(var) is Vector:
             return self.mul_vector(var)
         return self.mul_scalar(var)
@@ -148,7 +147,7 @@ nt), a positive integer as a size, or a list of floats.')
     def handle_truediv(self, var):
         if type(var) is not float and type(var) is not int:
             raise Exception('Invalid division')
-            
+
         return self.truediv_scalar(var)
 
     def __truediv__(self, var):

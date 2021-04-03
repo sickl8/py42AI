@@ -1,5 +1,6 @@
 from vector import Vector
 
+
 class Matrix:
     data = []
     shape = ()
@@ -22,16 +23,16 @@ class Matrix:
 
     def good_llist(self, lst):
         if (type(lst) == list and len(lst) > 0 and all(type(subl) == list and
-            len(subl) > 0 and all(type(mbr) == int or type(mbr) == float
-            for mbr in subl) for subl in lst)):
+           len(subl) > 0 and all(type(mbr) == int or type(mbr) == float
+           for mbr in subl) for subl in lst)):
             sub_len = len(lst[0])
             if all(len(subl) == sub_len for subl in lst):
                 return True
         return False
 
-    def	good_shape(self, shape):
+    def good_shape(self, shape):
         if (type(shape) == tuple and len(shape) == 2 and all(type(mbr) == int
-            and mbr > 0 for mbr in shape)):
+           and mbr > 0 for mbr in shape)):
             return True
         return False
 
@@ -57,7 +58,7 @@ class Matrix:
 
     def __add__(self, var):
         if (type(var) == Vector and var.size == self.shape[0]
-            and self.shape[1] == 1):
+           and self.shape[1] == 1):
             lst = []
             for elem in var.values:
                 lst.append([elem])
@@ -80,7 +81,7 @@ class Matrix:
 
     def __sub__(self, var):
         if (type(var) == Vector and var.size == self.shape[0]
-            and self.shape[1] == 1):
+           and self.shape[1] == 1):
             lst = []
             for elem in var.values:
                 lst.append([elem])
@@ -93,7 +94,7 @@ class Matrix:
 
     def __rsub__(self, var):
         if (type(var) == Vector and var.size == self.shape[0]
-            and self.shape[1] == 1):
+           and self.shape[1] == 1):
             lst = []
             for elem in var.values:
                 lst.append([elem])
@@ -118,7 +119,7 @@ class Matrix:
         if (type(var) == int or type(var) == float):
             return self.matrix_tdiv(var)
         raise Exception('Invalid opreand for Matrix Operation')
-    
+
     def __rtruediv__(self, var):
         raise Exception('Cannot divide a scalar by a Matrix')
 
@@ -131,13 +132,13 @@ class Matrix:
 
     def abs_compatible_matrix(self, var):
         if (type(var) == Matrix and var.shape[0] == self.shape[0] and
-            var.shape[1] == self.shape[1]):
+           var.shape[1] == self.shape[1]):
             return True
         return False
 
     def compatible_matrix(self, mtx0, mtx1):
         if (type(mtx0) == Matrix and type(mtx1) == Matrix
-            and mtx0.shape[1] == mtx1.shape[0]):
+           and mtx0.shape[1] == mtx1.shape[0]):
             return True
         return False
 
