@@ -20,9 +20,3 @@ class ImageProcessor:
     def display(self, arr):
         plt.imshow(arr)
         plt.show()
-
-
-imp = ImageProcessor()
-arr = imp.load('img.png')
-print(arr)
-imp.display(arr)
