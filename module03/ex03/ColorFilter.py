@@ -7,57 +7,63 @@ class ColorFilter:
         return
 
     def invert(self, array: np.ndarray):
-        ret = np.ndarray(array.shape, dtype=array.dtype)
-        ret = -array
-        return ret
+        array[:, :, 0:3] = -array[:, :, 0:3]
+        return array
 
     def to_blue(self, array: np.ndarray):
         ret = np.zeros(array.shape, dtype=array.dtype)
-        ln = len(array.shape)
-        for i in range(0, len(array)):
-            for j in range(0, len(array[0])):
-                ret[i][j][2] = array[i][j][2]
-                for k in range(3, ln):
-                    ret[i][j][k] = array[i][j][k]
+        ret[:, :, 2] = array[:, :, 2]
+        for i in range(3, len(array[0][0])):
+            ret[:, :, i] = array[:, :, i]
         return ret
 
     def to_green(self, array: np.ndarray):
-        ret = np.ndarray(array.shape, dtype=array.dtype)
-        ret = array * [0, 1, 0]
-        return ret
+        array[:, :, 0] *= 0
+        array[:, :, 2] *= 0
+        return array
 
     def to_red(self, array: np.ndarray):
-        b = self.to_blue(array)
-        g = self.to_green(array)
-        ret = np.ndarray(array.shape, dtype=array.dtype)
-        ret = array - (b + g)
-        return ret
+        red = self.to_blue(array)
+        red = self.to_green(red)
+        red[:, :, 0] = array[:, :, 0]
+        return red
 
-    # def to_celluloid(self, array: np.array):
-    #     ret = np.ndarray(array.shape, dtype=array.dtype)
-    #     div = 256 if type(ret[0][0][0]) == int else 1
-    #     for i in range(len(array)):
-    #         for j in range(len(array[0])):
-    #             r = ret[i][j][0] / div
-    #             g = ret[i][j][1] / div
-    #             b = ret[i][j][2] / div
-    #             luminence = 0.2126 * r + 0.7152 * g + 0.0722 * b
-    #             if
+    def to_celluloid(self, array: np.ndarray):
+        array[array[:, :, 0] <= 64, 0] = 0
+        array[array[:, :, 1] <= 64, 1] = 0
+        array[array[:, :, 2] <= 64, 2] = 0
+        array[((array <= 128) & (array > 64))[:, :, 0], 0] = 64
+        array[((array <= 128) & (array > 64))[:, :, 1], 1] = 64
+        array[((array <= 128) & (array > 64))[:, :, 2], 2] = 64
+        array[array[:, :, 0] > 128, 0] = 128
+        array[array[:, :, 1] > 128, 1] = 128
+        array[array[:, :, 2] > 128, 2] = 128
+        return array
 
-    #     return ret
+    def to_grayscale(self, array: np.ndarray, filter):
+        if filter == 'm' or filter == 'mean':
+            array[:, :, 0:3] = np.sum(array[:, :] / 3)
+        else:
+            # wei = np.tile([array.dtype(0.299), array.dtype(0.587), array.dtype(0.114)], array.shape)
+            # wei = np.shape((3), dtype='f')
+            # print(wei)
+            array[:, :, 0:3] = array[:, :, 0] * 0.299 | array[:, :, 1] * 0.587 | array[:, :, 2] * 0.114
+        return array
 
-imp = ImageProcessor()
-img = imp.load('musk.jpg', format='jpg')
-# print(type(img.dtype))
-imp.display(img)
 cf = ColorFilter()
-inv = cf.invert(img)
+imp = ImageProcessor()
+# img = imp.load('musk.jpg')
+img = imp.load('orig.png')
+imp.display(img)
+inv = cf.invert(img.copy())
 imp.display(inv)
-blue = cf.to_blue(img)
-imp.display(blue)
-green = cf.to_green(img)
-imp.display(green)
-red = cf.to_red(img)
-imp.display(red)
-# cel = cf.to_celluloid(img)
-# imp.display(cel)
+blue = cf.to_blue(img.copy())
+print('blue'); imp.display(blue)
+red = cf.to_red(img.copy())
+print('red'); imp.display(red)
+green = cf.to_green(img.copy())
+print('green'); imp.display(green)
+cel = cf.to_celluloid(img.copy())
+print('cel'); imp.display(cel)
+grm = cf.to_grayscale(img.copy(), 'w')
+print('grey_m'); imp.display(grm)

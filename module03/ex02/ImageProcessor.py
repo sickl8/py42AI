@@ -15,7 +15,8 @@ class ImageProcessor:
         image = Image.open(path)
         width, height = image.size
         print('Loading images of dimensions %d x %d' % (width, height))
-        return plt.imread(path)
+        var = np.array(image)
+        return var
 
     def display(self, arr):
         plt.imshow(arr)

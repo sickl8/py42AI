@@ -10,12 +10,13 @@ class ImageProcessor:
     def __init__(self):
         return
 
-    def load(self, path, format=None):
+    def load(self, path):
         self.path = path
         image = Image.open(path)
         width, height = image.size
         print('Loading images of dimensions %d x %d' % (width, height))
-        return plt.imread(path, format=format)
+        var = np.array(image)
+        return var
 
     def display(self, arr):
         plt.imshow(arr)
