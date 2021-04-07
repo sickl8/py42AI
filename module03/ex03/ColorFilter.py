@@ -1,13 +1,15 @@
 import numpy as np
 from ImageProcessor import ImageProcessor
 
+
 class ColorFilter:
 
     def __init__(self):
         return
 
     def invert(self, array: np.ndarray):
-        array[:, :, 0:3] = -array[:, :, 0:3]
+        mx = 1 if type(array[0][0][0]) == float else 255
+        array[:, :, 0:3] = mx - array[:, :, 0:3]
         return array
 
     def to_blue(self, array: np.ndarray):
@@ -42,28 +44,43 @@ class ColorFilter:
 
     def to_grayscale(self, array: np.ndarray, filter):
         if filter == 'm' or filter == 'mean':
-            array[:, :, 0:3] = np.sum(array[:, :] / 3)
+            array[:, :, 0:3] = np.sum(array[:, :, 0:3] / 3, axis=2,
+                                      keepdims=True).astype(array.dtype)
         else:
-            # wei = np.tile([array.dtype(0.299), array.dtype(0.587), array.dtype(0.114)], array.shape)
-            # wei = np.shape((3), dtype='f')
-            # print(wei)
-            array[:, :, 0:3] = array[:, :, 0] * 0.299 | array[:, :, 1] * 0.587 | array[:, :, 2] * 0.114
+            array[:, :, 0:3] = np.sum([array[:, :, 0:1] * 0.299,
+                                      array[:, :, 1:2] * 0.587,
+                                      array[:, :, 2:3] * 0.114], axis=0)
         return array
+
 
 cf = ColorFilter()
 imp = ImageProcessor()
-# img = imp.load('musk.jpg')
-img = imp.load('orig.png')
+# img = imp.load('flowers.png')
+# img = imp.load('dice.png')
+img = imp.load('musk.jpg')
+# img = imp.load('test.png')
 imp.display(img)
 inv = cf.invert(img.copy())
+print('inverted')
 imp.display(inv)
 blue = cf.to_blue(img.copy())
-print('blue'); imp.display(blue)
+print('blue')
+imp.display(blue)
 red = cf.to_red(img.copy())
-print('red'); imp.display(red)
+print('red')
+imp.display(red)
 green = cf.to_green(img.copy())
-print('green'); imp.display(green)
+print('green')
+imp.display(green)
 cel = cf.to_celluloid(img.copy())
-print('cel'); imp.display(cel)
-grm = cf.to_grayscale(img.copy(), 'w')
-print('grey_m'); imp.display(grm)
+print('cel')
+imp.display(cel)
+grm = cf.to_grayscale(img.copy(), 'm')
+print('grey_m')
+imp.display(grm)
+grw = cf.to_grayscale(img.copy(), 'w')
+print('grey_w')
+imp.display(grw)
+diff = grw[:, :, 0:3] - grm[:, :, 0:3]
+print('diff')
+imp.display(diff)
