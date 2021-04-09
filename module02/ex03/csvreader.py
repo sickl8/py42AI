@@ -1,6 +1,5 @@
 import shlex
-from tabulate import tabulate
-
+import tabulate
 
 class CsvReader():
     filename = None
@@ -79,6 +78,11 @@ class CsvReader():
             return None
         return self
 
+    def tabulate(self, headers=(), tablefmt="orgtbl"):
+        if self.header:
+            headers = self.header
+        print(tabulate.tabulate(self.data, headers=headers, tablefmt=tablefmt))
+
     def __exit__(self, *exc):
         if self.file:
             self.file.close()
@@ -91,4 +95,4 @@ with CsvReader('addresses.csv', header=True) as file:
     else:
         data = file.get_data()
         header = file.get_header()
-        print(tabulate(data, headers=header, tablefmt='orgtbl'))
+        file.tabulate()
