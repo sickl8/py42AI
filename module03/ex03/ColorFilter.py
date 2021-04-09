@@ -55,9 +55,9 @@ class ColorFilter:
 
 cf = ColorFilter()
 imp = ImageProcessor()
-# img = imp.load('flowers.png')
+img = imp.load('flowers.png')
 # img = imp.load('dice.png')
-img = imp.load('musk.jpg')
+# img = imp.load('musk.jpg')
 # img = imp.load('test.png')
 imp.display(img)
 inv = cf.invert(img.copy())
