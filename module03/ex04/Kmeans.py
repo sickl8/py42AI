@@ -57,7 +57,7 @@ class KmeansClustering:
                 ax.scatter(self.centroids[i][0], self.centroids[i][1], self.centroids[i][2], c=colors[i], marker='x')
                 for j in range(len(belong[i])):
                     ax.scatter(belong[i][j][0], belong[i][j][1], belong[i][j][2], c=colors[i])
-            # plt.show()
+            plt.show()
             nitr += 1
 
         print('nitr:', nitr)
