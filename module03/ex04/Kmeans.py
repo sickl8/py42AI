@@ -57,7 +57,7 @@ class KmeansClustering:
                 ax.scatter(self.centroids[i][0], self.centroids[i][1], self.centroids[i][2], c=colors[i], marker='x')
                 for j in range(len(belong[i])):
                     ax.scatter(belong[i][j][0], belong[i][j][1], belong[i][j][2], c=colors[i])
-            plt.show()
+            # plt.show()
             nitr += 1
 
         print('nitr:', nitr)
@@ -76,7 +76,7 @@ class KmeansClustering:
             belongs[self.closest(entry)].append(entry) 
         return belongs
 
-km = KmeansClustering()
+km = KmeansClustering(ncentroid=4)
 with CsvReader('solar_system_census.csv', header=True) as citizens:
     if citizens is None:
         print('file is corrupt')
@@ -88,3 +88,13 @@ with CsvReader('solar_system_census.csv', header=True) as citizens:
         npc = npc[:, 1:]
         # print(npc)
         km.fit(npc)
+        """
+        Belt: max height, ? weight, min bone-den | bH, bW, bB
+        Mars: mH > eH   , ? weight, ?   bone-den | mH, mW, mB
+        Erth: eH < mH   , eW > vW , ?   bone-den | eH, eW, eB
+        Vnus: ?   height, vW < eW , ?   bone-den | vH, vW, vB
+        [196.31882434  96.72908505   0.78466393] ? Belt
+        [194.85778543  71.9904936    0.78904601] ? Mars
+        [182.30688779  86.2436454    0.86820468] ? Earth
+        [170.96978009  74.22752665   0.95362633] ? Venus
+        """
